@@ -1,19 +1,9 @@
 FROM ubuntu:focal
 
 RUN apt update && \
-  apt-get install -y software-properties-common && \
-  apt-add-repository -y ppa:deadsnakes/ppa && apt-get update && \
-  apt-get install git-core language-pack-en python3-pip libmysqlclient-dev ntp libssl-dev python3.8-dev python3.8-venv -qy && \
+  apt-get install -y software-properties-common && apt-get update && \
+  apt-get install git-core language-pack-en libmysqlclient-dev ntp libssl-dev python3.8 python3-pip -qy && \
   rm -rf /var/lib/apt/lists/*
-
-ENV VIRTUAL_ENV=/venv
-RUN python3.8 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
 
 RUN useradd -m --shell /bin/false app
 RUN mkdir -p /edx/app/log/
@@ -29,7 +19,7 @@ COPY . /edx/app/xqueue
 RUN chown app /edx/app/xqueue
 USER app
 
-RUN python manage.py migrate && python manage.py update_users
+RUN python3.8 manage.py migrate && python3.8 manage.py update_users
 
 EXPOSE 8040
 CMD gunicorn -c /edx/app/xqueue/xqueue/docker_gunicorn_configuration.py --bind=0.0.0.0:8040 --workers 2 --max-requests=1000 xqueue.wsgi:application
