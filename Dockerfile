@@ -3,10 +3,8 @@ FROM ubuntu:jammy
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Moscow
 
-RUN apt update && \
-  apt-get install -y software-properties-common=0.99.22.1 && apt-get update && \
-  apt-get install git=1:2.34.1-1ubuntu1.2 language-pack-en=1:22.04+20220415 libmysqlclient-dev=8.0.29-0ubuntu0.22.04.2 ntp=1:4.2.8p15+dfsg-1ubuntu2 libssl-dev=3.0.2-0ubuntu1.2 python3.10=3.10.4-3 python3-pip=22.0.2+dfsg-1 -qy && \
-  rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+  apt-get install software-properties-common git language-pack-en libmysqlclient-dev ntp libssl-dev python3.10 python3-pip -qy
 
 RUN useradd -m --shell /bin/false app
 RUN mkdir -p /edx/app/log/
