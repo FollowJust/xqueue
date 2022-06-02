@@ -1,5 +1,7 @@
 FROM ubuntu:jammy
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN apt update && \
   apt-get install -y software-properties-common=0.99.22.1 && \
   apt-add-repository -y ppa:deadsnakes/python3.10-jammy && apt-get update && \
